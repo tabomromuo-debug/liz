@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Você é Minha Estrela ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600;700;800&family=Nunito:wght@300;400;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --pink-light: #ffc8dd;
+            --pink-medium: #ff9ebb;
+            --pink-dark: #ff6b9d;
+            --pink-deep: #ff4d8d;
+            --blue-light: #bde0fe;
+            --blue-medium: #a2d2ff;
+            --purple-light: #cdb4db;
+            --purple-medium: #b388eb;
+            --cream: #fff0f5;
+            --white: #ffffff;
+            --text-dark: #5a4a5a;
+            --text-medium: #7a6a7a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', 'Fredoka', sans-serif;
+            background: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text-dark);
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--pink-light), var(--blue-light), var(--purple-light));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-emoji {
+            font-size: 5rem;
+            animation: bounce 1s ease infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .loading-text {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.5rem;
+            color: var(--white);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: pulse 1.5s ease infinite;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--white);
+            border-radius: 10px;
+            animation: loadFill 2.5s ease forwards;
+        }
+
+        @keyframes loadFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* ===== PARTICLE CANVAS ===== */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--pink-light) 0%, var(--blue-light) 50%, var(--purple-light) 100%);
+            overflow: hidden;
+            padding: 40px 20px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 60%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+
+        .hero-bow {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            animation: wiggle 2s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 5px 15px rgba(255,107,157,0.4));
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-8deg) scale(1); }
+            25% { transform: rotate(8deg) scale(1.1); }
+            50% { transform: rotate(-5deg) scale(1); }
+            75% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .hero-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            color: var(--white);
+            text-shadow: 
+                3px 3px 0px var(--pink-dark),
+                6px 6px 0px rgba(255,107,157,0.3),
+                0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            color: var(--white);
+            background: rgba(255,255,255,0.25);
+            padding: 12px 30px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            margin-bottom: 30px;
+            border: 2px solid rgba(255,255,255,0.4);
+            font-weight: 600;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollBounce 2s ease infinite;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            font-size: 2rem;
+            color: var(--white);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+
+        /* ===== SECTION STYLES ===== */
+        .section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--pink-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2.5rem;
+            animation: iconSpin 4s ease-in-out infinite;
+        }
+
+        @keyframes iconSpin {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        /* ===== BEAUTY CARDS ===== */
+        .beauty-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .beauty-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 35px 30px;
+            text-align: center;
+            box-shadow: 
+                0 10px 40px rgba(255,107,157,0.1),
+                0 0 0 3px var(--pink-light);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .beauty-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--pink-light), var(--blue-light), var(--purple-light));
+        }
+
+        .beauty-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 20px 60px rgba(255,107,157,0.2),
+                0 0 0 4px var(--pink-medium);
+        }
+
+        .beauty-card .emoji {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+            animation: emojiFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .beauty-card h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.4rem;
+            color: var(--pink-deep);
+            margin-bottom: 12px;
+        }
+
+        .beauty-card p {
+            font-size: 1rem;
+            color: var(--text-medium);
+            line-height: 1.7;
+        }
+
+        /* ===== IMPORTANCE SECTION ===== */
+        .importance-section {
+            background: linear-gradient(135deg, var(--blue-light) 0%, var(--purple-light) 100%);
+            border-radius: 30px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(179,136,235,0.2);
+        }
+
+        .importance-section::before {
+            content: '✨ 💕 🎀 💖 🌟 💗 ✨';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            letter-spacing: 20px;
+        }
+
+        .importance-section::after {
+            content: '✨ 💕 🎀 💖 🌟 💗 ✨';
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            letter-spacing: 20px;
+        }
+
+        .importance-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .importance-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.2rem;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .importance-text {
+            font-size: 1.2rem;
+            color: var(--white);
+            text-align: center;
+            line-height: 2;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .importance-text strong {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+
+        /* ===== COMPARISON SECTION ===== */
+        .comparison-section {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 50px 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(255,107,157,0.1);
+            border: 3px solid var(--pink-light);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-item:hover {
+            transform: scale(1.05);
+        }
+
+        .comparison-item.hello-kitty {
+            background: linear-gradient(135deg, #ffe4ec, #ffc8dd);
+        }
+
+        .comparison-item.chiikawa {
+            background: linear-gradient(135deg, #e0f4f1, #c8e6e0);
+        }
+
+        .comparison-item.friend {
+            background: linear-gradient(135deg, var(--pink-light), var(--purple-light));
+            box-shadow: 0 10px 30px rgba(255,107,157,0.3);
+            transform: scale(1.1);
+        }
+
+
+        .comparison-item h4 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .comparison-item.friend h4 {
+            color: var(--white);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .comparison-item p {
+            font-size: 0.95rem;
+            color: var(--text-medium);
+        }
+
+        .comparison-item.friend p {
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .vs-text {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2rem;
+            color: var(--pink-medium);
+            font-weight: 700;
+        }
+
+        /* ===== METER SECTION ===== */
+        .meter-section {
+            background: linear-gradient(135deg, var(--pink-light), var(--pink-medium));
+            border-radius: 30px;
+            padding: 50px 40px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 0 15px 50px rgba(255,107,157,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meter-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .meter-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .meter-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .meter-track {
+            width: 100%;
+            height: 50px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid rgba(255,255,255,0.5);
+        }
+
+        .meter-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--white), #fff9c4, #ffd700, #ff6b9d);
+            border-radius: 25px;
+            position: relative;
+            transition: width 3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+
+        .meter-fill::after {
+            content: '⭐';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            animation: starSpin 1s linear infinite;
+        }
+
+        @keyframes starSpin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        .meter-value {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 3rem;
+            color: var(--white);
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: valuePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes valuePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .meter-desc {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* ===== GALLERY SECTION ===== */
+        .gallery-section {
+            margin: 40px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px) rotate(2deg);
+            border-color: var(--pink-light);
+            box-shadow: 0 10px 30px rgba(255,107,157,0.15);
+        }
+
+        .gallery-item .gallery-emoji {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .gallery-item p {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+
+        /* ===== FINAL MESSAGE ===== */
+        .final-message {
+            background: linear-gradient(135deg, var(--pink-dark), var(--purple-medium));
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(255,77,141,0.3);
+        }
+
+        .final-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .final-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .final-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: heartBeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.15); }
+        }
+
+        .final-text {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(1.3rem, 4vw, 2rem);
+            color: var(--white);
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .final-signature {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .magic-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: var(--white);
+            color: var(--pink-deep);
+            border: none;
+            border-radius: 50px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .magic-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .magic-button:active {
+            transform: scale(0.95);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, var(--pink-light), var(--blue-light));
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-hearts {
+            font-size: 2rem;
+            letter-spacing: 15px;
+            margin-bottom: 15px;
+            animation: footerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes footerPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .footer-text {
+            color: var(--text-medium);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ===== CONFETTI ===== */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            top: -50px;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.5); opacity: 0; }
+        }
+
+        /* ===== FLOATING HEARTS ON CLICK ===== */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: floatUp 2s ease-out forwards;
+            z-index: 9998;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .comparison-item.friend {
+                transform: scale(1);
+                order: -1;
+            }
+            .vs-text {
+                display: none;
+            }
+            .section {
+                padding: 50px 15px;
+            }
+            .importance-section,
+            .comparison-section,
+            .meter-section,
+            .final-message {
+                padding: 40px 25px;
+            }
+        }
+
+        /* ===== SCROLL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-emoji">🎀</div>
+        <div class="loading-text">Preparando algo especial...</div>
+        <div class="loading-bar">
+            <div class="loading-bar-fill"></div>
+        </div>
+    </div>
+
+
+    <!-- Particle Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-bow">🎀</div>
+            <h1 class="hero-title">Um Sitezinho Sobre Você</h1>
+            <div class="hero-subtitle">Feito com muito carinho 💕</div>
+        </div>
+        <div class="scroll-indicator" onclick="document.getElementById('beauty').scrollIntoView({behavior:'smooth'})">
+            <span>⬇️</span>
+        </div>
+    </section>
+
+    <!-- BEAUTY SECTION -->
+    <section class="section" id="beauty">
+        <h2 class="section-title reveal">
+            <span class="icon">🌸</span>
+            O Quão Linda Você É
+            <span class="icon">🌸</span>
+        </h2>
+
+        <div class="beauty-cards">
+            <div class="beauty-card reveal reveal-delay-1">
+                <span class="emoji">✨</span>
+                <h3>Brilho Interior</h3>
+                <p>Assim como a Hello Kitty espalha amor por onde passa, seu sorriso ilumina qualquer ambiente. Sua bondade é a joia mais preciosa do mundo.</p>
+            </div>
+            <div class="beauty-card reveal reveal-delay-2">
+                <span class="emoji">🦋</span>
+                <h3>Graciosidade</h3>
+                <p>Cada gesto seu é poesia em movimento. Você tem uma elegância natural que encanta todos ao seu redor, como uma borboleta dançando no vento.</p>
+            </div>
+            <div class="beauty-card reveal reveal-delay-3">
+                <span class="emoji">🌈</span>
+                <h3>Cores da Alma</h3>
+                <p>Você traz cor para a vida de todos. Seu espírito vibrante é mais belo que o arco-íris mais perfeito depois da chuva.</p>
+            </div>
+            <div class="beauty-card reveal reveal-delay-4">
+                <span class="emoji">💎</span>
+                <h3>Raridade</h3>
+                <p>Pessoas como você são mais raras que diamantes. Sua autenticidade e sinceridade fazem de você alguém verdadeiramente especial.</p>
+            </div>
+            <div class="beauty-card reveal reveal-delay-5">
+                <span class="emoji">🌟</span>
+                <h3>Estrela Cadente</h3>
+                <p>Quando você aparece, é como ver uma estrela cadente — um momento mágico que todos querem guardar para sempre.</p>
+            </div>
+            <div class="beauty-card reveal reveal-delay-1">
+                <span class="emoji">🌺</span>
+                <h3>Doçura Sem Fim</h3>
+                <p>Como o Chiikawa derrete corações com sua pureza, você tem uma doçura genuína que aquece a alma de quem te conhece. Sua gentileza é um presente raro!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPORTANCE SECTION -->
+    <section class="section">
+        <div class="importance-section reveal">
+            <div class="importance-content">
+                <h2 class="importance-title">💕 Eu Me Importo Muito Com Você 💕</h2>
+                <p class="importance-text">
+                    Você não faz ideia do quanto eu <strong>me importo</strong> com você.<br>
+                    Do quanto eu quero te ver <strong>feliz</strong>.<br><br>
+                    <span style="font-size: 1.5rem; font-weight: 800; color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.5);">Você é INFINITO/10! 🌟</span><br><br>
+                    <strong>Você é minha pessoa favorita!</strong> 💖
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- COMPARISON SECTION -->
+    <section class="section">
+        <h2 class="section-title reveal">
+            <span class="icon">🎀</span>
+            Hello Kitty + Chiikawa = VOCÊ
+            <span class="icon">🎀</span>
+        </h2>
+
+        <div class="comparison-section reveal">
+            <div class="comparison-grid">
+                <div class="comparison-item hello-kitty">
+                    <span style="font-size: 4rem; display: block; margin-bottom: 10px;">🎀</span>
+                    <h4>Doçura</h4>
+                    <p>Amizade verdadeira</p>
+                </div>
+                <div class="vs-text">+</div>
+                <div class="comparison-item chiikawa">
+                    <span style="font-size: 4rem; display: block; margin-bottom: 10px;">🌸</span>
+                    <h4>Fofura</h4>
+                    <p>Coragem infinita</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">⬇️</div>
+            </div>
+            <div class="comparison-item friend" style="max-width: 400px; margin: 0 auto;">
+                <span style="font-size: 5rem; display: block; margin-bottom: 15px;">👑</span>
+                <h4>MINHA AMIGA</h4>
+                <p>Tem a doçura da Hello Kitty, a fofura do Chiikawa, e uma beleza única que supera todos os personagens juntos! 💖</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BEAUTY METER -->
+    <section class="section">
+        <div class="meter-section reveal">
+            <h2 class="meter-title">📊 Medidor de Beleza & Importância</h2>
+            <div class="meter-wrapper">
+                <div class="meter-labels">
+                    <span>0%</span>
+                    <span>1000% INCRÍVEL!</span>
+                </div>
+                <div class="meter-track">
+                    <div class="meter-fill" id="meterFill"></div>
+                </div>
+                <div class="meter-value" id="meterValue">0%</div>
+                <div class="meter-desc">🌟 Ultrapassou todos os limites da escala! 🌟</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUALITIES GALLERY -->
+    <section class="section gallery-section">
+        <h2 class="section-title reveal">
+            <span class="icon">💝</span>
+            Cada Detalhe Seu é Perfeito
+            <span class="icon">💝</span>
+        </h2>
+
+        <div class="gallery-grid">
+            <div class="gallery-item reveal reveal-delay-1">
+                <span class="gallery-emoji">😊</span>
+                <p>Seu Sorriso</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-2">
+                <span class="gallery-emoji">👁️</span>
+                <p>Seus Olhos</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-3">
+                <span class="gallery-emoji">💇</span>
+                <p>Seu Cabelo</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-4">
+                <span class="gallery-emoji">🤗</span>
+                <p>Seu Abraço</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-1">
+                <span class="gallery-emoji">😂</span>
+                <p>Sua Risada</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-2">
+                <span class="gallery-emoji">💭</span>
+                <p>Sua Mente</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-3">
+                <span class="gallery-emoji">❤️</span>
+                <p>Seu Coração</p>
+            </div>
+            <div class="gallery-item reveal reveal-delay-4">
+                <span class="gallery-emoji">🌺</span>
+                <p>Sua Alma</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL MESSAGE -->
+    <section class="section">
+        <div class="final-message reveal">
+            <div class="final-content">
+                <span class="final-emoji">💖</span>
+                <p class="final-text">
+                    "Você é mais preciosa que todas as estrelas do céu.<br>
+                    Mais doce que todos os doces do mundo.<br>
+                    Mais rara que o diamante mais perfeito.<br>
+                    E mais importante que qualquer coisa que eu já tive.<br><br>
+                    <strong>Obrigado por existir e fazer parte da minha vida!</strong>"
+                </p>
+                <div class="final-signature">— Com todo o amor do mundo 🌍</div>
+                <button class="magic-button" id="magicButton" onclick="triggerMagic()">
+                    ✨ Clique para Magia ✨
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-hearts">💖 💕 💗 💝 💘 💖</div>
+        <p class="footer-text">Feito com amor, inspiração Hello Kitty & Chiikawa 🎀</p>
+    </footer>
+
+    <script>
+        // ===== LOADING SCREEN =====
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2800);
+        });
+
+        // ===== PARTICLE SYSTEM =====
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const symbols = ['💖', '✨', '🌸', '💕', '⭐', '🎀', '💗', '🌟', '💝', '🦋', '🌺', '💎'];
+        const colors = ['#ffc8dd', '#bde0fe', '#cdb4db', '#ffd700', '#ff6b9d', '#a2d2ff'];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 50;
+                this.size = Math.random() * 20 + 15;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 2;
+                this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y < -50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation * Math.PI / 180);
+                ctx.font = `${this.size}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.symbol, 0, 0);
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 40; i++) {
+            const p = new Particle();
+            p.y = Math.random() * canvas.height;
+            particles.push(p);
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== SCROLL REVEAL =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ===== BEAUTY METER =====
+        let meterAnimated = false;
+        const meterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !meterAnimated) {
+                    meterAnimated = true;
+                    animateMeter();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        meterObserver.observe(document.querySelector('.meter-section'));
+
+        function animateMeter() {
+            const fill = document.getElementById('meterFill');
+            const value = document.getElementById('meterValue');
+            let current = 0;
+            const target = 100;
+            const duration = 3000;
+            const increment = target / (duration / 16);
+
+            function updateMeter() {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    fill.style.width = '100%';
+                    value.textContent = '1000%!';
+                    value.style.color = '#ffd700';
+                    value.style.textShadow = '0 0 20px rgba(255,215,0,0.8)';
+                    return;
+                }
+                fill.style.width = current + '%';
+                value.textContent = Math.floor(current * 10) + '%';
+                requestAnimationFrame(updateMeter);
+            }
+            updateMeter();
+        }
+
+        // ===== CONFETTI EXPLOSION =====
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const shapes = ['💖', '✨', '🌸', '💕', '⭐', '🎀', '💗', '🌟', '💝', '🦋', '🌺', '💎', '🎉', '🎊'];
+            const colors = ['#ff6b9d', '#ffc8dd', '#bde0fe', '#cdb4db', '#ffd700', '#ff85a2', '#a2d2ff'];
+
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.fontSize = (Math.random() * 25 + 15) + 'px';
+                confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 1 + 's';
+                container.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        // ===== FLOATING HEARTS ON CLICK =====
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.magic-button')) return;
+
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = ['💖', '💕', '💗', '💝', '💘'][Math.floor(Math.random() * 5)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 2000);
+        });
+
+        // ===== MAGIC BUTTON =====
+        function triggerMagic() {
+            createConfetti();
+
+            const btn = document.getElementById('magicButton');
+            btn.textContent = '🎉 Você é Incrível! 🎉';
+            btn.style.background = 'linear-gradient(135deg, #ffd700, #ff6b9d)';
+            btn.style.color = 'white';
+
+            setTimeout(() => {
+                btn.textContent = '✨ Clique para Magia ✨';
+                btn.style.background = 'white';
+                btn.style.color = '#ff4d8d';
+            }, 3000);
+
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.textContent = '💖';
+                    heart.style.left = (window.innerWidth / 2 + (Math.random() - 0.5) * 300) + 'px';
+                    heart.style.top = (window.innerHeight / 2 + (Math.random() - 0.5) * 200) + 'px';
+                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        // ===== MOUSE TRAIL SPARKLES =====
+        let lastSparkle = 0;
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastSparkle > 50) {
+                lastSparkle = now;
+                const sparkle = document.createElement('div');
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = e.clientX + 'px';
+                sparkle.style.top = e.clientY + 'px';
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.fontSize = '16px';
+                sparkle.style.zIndex = '9998';
+                sparkle.textContent = '✨';
+                sparkle.style.animation = 'floatUp 1s ease-out forwards';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 1000);
+            }
+        });
+
+        // ===== PARALLAX EFFECT ON SCROLL =====
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
